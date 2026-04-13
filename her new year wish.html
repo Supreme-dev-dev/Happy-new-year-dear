@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नयाँ वर्ष २०८३ • मेरी प्रिय</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&amp;display=swap');
+
+        :root {
+            --tw-color-primary: #f59e0b;
+        }
+        
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', system-ui, sans-serif;
+        }
+
+        #intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 50;
+            background: radial-gradient(circle at center, #1e2937 0%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .intro-text {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fde047;
+            text-shadow: 0 0 30px #f59e0b,
+                         0 0 60px #f59e0b;
+            animation: glow 2s ease-in-out infinite alternate;
+            letter-spacing: 0.15em;
+            z-index: 10;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #f59e0b; }
+            to { text-shadow: 0 0 60px #f59e0b, 0 0 100px #f59e0b; }
+        }
+
+        #book-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5e8c7 0%, #e8d5a3 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .book-container {
+            width: 95%;
+            max-width: 1100px;
+            height: 85vh;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px -12px rgb(0 0 0 / 0.4),
+                0 0 0 15px #5c3317,
+                0 0 0 20px #d97706;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            transform: perspective(1200px) rotateX(8deg);
+        }
+
+        .book-spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            background: linear-gradient(to right, #5c3317, #78350f, #5c3317);
+            transform: translateX(-50%);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.3),
+                       -5px 0 15px rgba(0,0,0,0.3);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-spine::before {
+            content: "२०८३";
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fde047;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 8px;
+        }
+
+        .book-page {
+            flex: 1;
+            padding: 60px 50px;
+            background: #fdf4e3;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.15);
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-page.left {
+            border-radius: 20px 0 0 20px;
+            background: linear-gradient(to right, #f8f1e3, #fdf4e3);
+        }
+
+        .book-page.right {
+            border-radius: 0 20px 20px 0;
+            background: linear-gradient(to left, #f8f1e3, #fdf4e3);
+        }
+
+        .poem-text {
+            font-size: 1.35rem;
+            line-height: 1.85;
+            color: #3f2a1e;
+            text-align: center;
+            font-weight: 500;
+            max-width: 100%;
+            margin: auto;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+        }
+
+        .poem-text::first-letter {
+            font-size: 4rem;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+            color: #d97706;
+        }
+
+        .message {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #b91c1c;
+            text-align: center;
+            margin-top: auto;
+            text-shadow: 0 0 20px #f59e0b;
+            letter-spacing: 4px;
+        }
+
+        .heart {
+            animation: floatHeart 3s ease-in-out infinite;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .switch-transition {
+            animation: bookOpen 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes bookOpen {
+            0% {
+                opacity: 0;
+                transform: perspective(1200px) rotateX(40deg) scale(0.6);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1200px) rotateX(8deg) scale(1);
+            }
+        }
+
+        .rocket-label {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-shadow: 0 0 15px #f59e0b;
+            z-index: 30;
+            animation: rocketText 1.5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body class="overflow-hidden bg-slate-950">
+
+    <!-- INTRO ANIMATION SCREEN -->
+    <div id="intro">
+        <canvas id="canvas" class="absolute inset-0"></canvas>
+        
+        <!-- Floating festive text -->
+        <div class="intro-text">
+            नयाँ वर्ष २०८३<br>
+            <span class="text-4xl block mt-3 text-amber-300">मेरी प्रिय</span>
+        </div>
+
+        <!-- Rocket label (restored with beautiful Nepali text) -->
+        <div class="rocket-label">
+            <span class="text-2xl">>></span>
+            <span class="text-amber-300">>>></span>
+            <span class="text-2xl">🎇</span>
+        </div>
+    </div>
+
+    <!-- BOOK SECTION -->
+    <div id="book-section">
+        <div class="book-container switch-transition">
+            
+            <!-- Left Page -->
+            <div class="book-page left flex flex-col items-center justify-center">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-amber-100 rounded-2xl mb-6 heart">
+                        ❤️
+                    </div>
+                    <h1 class="text-5xl font-bold text-amber-800 tracking-widest">२०८३</h1>
+                    <p class="text-xl text-amber-700 mt-2 font-medium">नेपाली नयाँ वर्ष</p>
+                </div>
+                
+                <!-- Decorative element -->
+                <div class="w-40 h-px bg-gradient-to-r from-transparent via-amber-600 to-transparent my-8"></div>
+                
+                <p class="text-amber-600 text-lg italic text-center max-w-xs">
+                    May you smile with no embracement<br>
+                    and no braces or braces nvm, you will always be the most gorgeous to me 💖
+                </p>
+                
+                <div class="mt-auto flex flex-wrap justify-center gap-4 text-4xl">
+                    🌸 &nbsp; 🌺 &nbsp; 🌼 &nbsp; 💖
+                </div>
+            </div>
+
+            <!-- Book Spine -->
+            <div class="book-spine"></div>
+
+            <!-- Right Page - The Poem -->
+            <div class="book-page right flex flex-col">
+                <div class="poem-text leading-relaxed">
+                    for this very new year,<br>
+                    I wish you alot and alot of happiness<br><br>
+                    
+                    I hope to be with you forever <br>
+                    even at the moments you don't need me haha<br><br>
+                    
+                    I want to irritate you more this year <br>
+                    And I want to love you more as well<br><br>
+                    
+                    I hope I will be doing more for me this year <br>
+                    And I hope I will be a better person for you too<br><br>
+                    
+                    I wish the best for you and your family, I love all of you guys even if I don't know them, I love them <br>
+                    And I hope they love you even more as well, NEB मा best perform गर... deepest wish from my heart<br><br>
+                    <span class="text-amber-700 font-semibold">नयाँ वर्षको धेरै धेरै शुभकामना → to my inspiration my दक्षिणा</span>
+                </div>
+
+                <!-- Final Message -->
+                <div class="message mt-8">
+                    नयाँ वर्षको शुभकामना 💞
+                </div>
+
+                <!-- Small signature -->
+                <div class="text-right mt-auto text-amber-700 text-sm font-medium">
+                    — yours Supu <br>
+                    <span class="block text-xs">२०८३ बैशाख १</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind initialization (kept as in your code)
+        function initTailwind() {
+            return { config(userConfig = {}) { return { content: [], theme: { extend: {} }, plugins: [], ...userConfig } }, theme: { extend: {} } }
+        }
+        initTailwind()
+
+        // ====================== CANVAS ANIMATION ======================
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        
+        let width, height
+        let rocket = {}
+        let stars = []
+        let particles = []
+        let frame = 0
+        let animationComplete = false
+        let switchTimeout = null
+
+        function resizeCanvas() {
+            width = window.innerWidth
+            height = window.innerHeight
+            canvas.width = width
+            canvas.height = height
+        }
+
+        // Responsive fix: update rocket + stars on window resize
+        function handleResize() {
+            resizeCanvas()
+            // Only reset rocket if it hasn't exploded yet
+            if (!rocket.exploded) {
+                rocket.x = width / 2
+                rocket.y = height - 80
+            }
+            createStars()
+        }
+
+        // Stars
+        function createStars() {
+            stars = []
+            for (let i = 0; i < 220; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height * 0.7,
+                    size: Math.random() * 2.8 + 0.6,
+                    speed: Math.random() * 0.8 + 0.3
+                })
+            }
+        }
+
+        // Rocket (now initialized inside startWebsite for safety)
+        function initRocket() {
+            rocket = {
+                x: width / 2,
+                y: height - 80,
+                vy: -8.5,
+                exploded: false,
+                trail: []
+            }
+        }
+
+        class Particle {
+            constructor(x, y, vx, vy, color, life, size, isFirework = false) {
+                this.x = x
+                this.y = y
+                this.vx = vx
+                this.vy = vy
+                this.color = color
+                this.life = life
+                this.maxLife = life
+                this.size = size
+                this.gravity = isFirework ? 0.08 : 0.03
+                this.isFirework = isFirework
+                this.alpha = 1
+            }
+            
+            update() {
+                this.vy += this.gravity
+                this.x += this.vx
+                this.y += this.vy
+                this.life--
+                this.alpha = this.life / this.maxLife
+                if (this.isFirework) this.vx *= 0.98
+            }
+            
+            draw() {
+                ctx.save()
+                ctx.globalAlpha = this.alpha
+                ctx.fillStyle = this.color
+                ctx.shadowBlur = 12
+                ctx.shadowColor = this.color
+                ctx.fillRect(this.x, this.y, this.size, this.size)
+                ctx.restore()
+            }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#f59e0b', '#ec4899', '#a78bfa', '#22d3ee', '#f43f5e', '#eab308', '#c026d3']
+            const particleCount = 95 + Math.random() * 45
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2
+                const velocity = 3.5 + Math.random() * 7.5
+                const vx = Math.cos(angle) * velocity
+                const vy = Math.sin(angle) * velocity - Math.random() * 3
+                
+                particles.push(new Particle(x, y, vx, vy, colors[Math.floor(Math.random() * colors.length)], 85 + Math.random() * 65, 4 + Math.random() * 5, true))
+            }
+            
+            // Extra bright center flash
+            for (let i = 0; i < 18; i++) {
+                particles.push(new Particle(x, y, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, '#fffbeb', 25, 7))
+            }
+        }
+
+        function createFlame(x, y) {
+            const colors = ['#f59e0b', '#f97316', '#fb923c', '#fefce8']
+            for (let i = 0; i < 9; i++) {
+                particles.push(new Particle(
+                    x + (Math.random() * 14 - 7),
+                    y + 28,
+                    (Math.random() - 0.5) * 2.5,
+                    Math.random() * 4 + 3,
+                    colors[Math.floor(Math.random() * colors.length)],
+                    22,
+                    6 + Math.random() * 6
+                ))
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height)
+
+            // Draw stars
+            ctx.fillStyle = '#fefce8'
+            for (let star of stars) {
+                ctx.globalAlpha = 0.4 + Math.sin(frame / 12 + star.x) * 0.6
+                ctx.fillRect(star.x, star.y, star.size, star.size)
+                star.y += star.speed
+                if (star.y > height) star.y = 0
+            }
+            ctx.globalAlpha = 1
+
+            // Rocket logic
+            if (!rocket.exploded) {
+                rocket.y += rocket.vy
+                rocket.vy = Math.max(rocket.vy - 0.18, -18)
+                
+                // Draw rocket
+                ctx.save()
+                ctx.translate(rocket.x, rocket.y)
+                ctx.fillStyle = '#e2e8f0'
+                ctx.fillRect(-12, -35, 24, 55)
+                ctx.fillStyle = '#b91c1c'
+                ctx.beginPath()
+                ctx.moveTo(-12, -35)
+                ctx.lineTo(0, -68)
+                ctx.lineTo(12, -35)
+                ctx.fill()
+                ctx.fillStyle = '#1e2937'
+                ctx.fillRect(-8, -25, 16, 12)
+                ctx.fillStyle = '#b91c1c'
+                ctx.beginPath()
+                ctx.moveTo(-12, 20)
+                ctx.lineTo(-28, 35)
+                ctx.lineTo(-12, 35)
+                ctx.fill()
+                ctx.beginPath()
+                ctx.moveTo(12, 20)
+                ctx.lineTo(28, 35)
+                ctx.lineTo(12, 35)
+                ctx.fill()
+                ctx.restore()
+                
+                createFlame(rocket.x, rocket.y)
+                
+                // Smoke trail
+                rocket.trail.push({x: rocket.x, y: rocket.y + 25, alpha: 0.9})
+                for (let i = 0; i < rocket.trail.length; i++) {
+                    const t = rocket.trail[i]
+                    ctx.globalAlpha = t.alpha
+                    ctx.fillStyle = '#64748b'
+                    ctx.fillRect(t.x - 6, t.y, 12, 22)
+                    t.alpha -= 0.035
+                }
+                rocket.trail = rocket.trail.filter(t => t.alpha > 0)
+                
+                if (rocket.y < height * 0.22) {
+                    rocket.exploded = true
+                    
+                    for (let i = 0; i < 7; i++) {
+                        setTimeout(() => createFirework(rocket.x + (Math.random() * 120 - 60), rocket.y - 30), i * 45)
+                    }
+                    
+                    setTimeout(() => {
+                        for (let i = 0; i < 11; i++) {
+                            createFirework(Math.random() * width, Math.random() * (height * 0.55))
+                        }
+                    }, 380)
+                    
+                    animationComplete = true
+                }
+            }
+
+            // Update & draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i]
+                p.update()
+                p.draw()
+                if (p.life <= 0) particles.splice(i, 1)
+            }
+
+            frame++
+            
+            // Auto switch
+            if (animationComplete && !switchTimeout) {
+                switchTimeout = setTimeout(launchBookTransition, 2600)
+            }
+            
+            // Keep animating until transition is done
+            if (!animationComplete || particles.length > 5) {
+                requestAnimationFrame(animate)
+            }
+        }
+
+        function launchBookTransition() {
+            const intro = document.getElementById('intro')
+            const bookSection = document.getElementById('book-section')
+            
+            intro.style.transition = 'all 1.8s cubic-bezier(0.4, 0, 0.2, 1)'
+            intro.style.opacity = '0'
+            intro.style.transform = 'scale(0.75) translateY(-40px)'
+            
+            setTimeout(() => {
+                intro.style.display = 'none'
+                bookSection.style.display = 'flex'
+                setTimeout(() => {
+                    bookSection.style.opacity = '1'
+                }, 30)
+                
+                console.log('%c🎉 नयाँ वर्ष २०८३ को हार्दिक शुभकामना मेरी प्रिय! 💖', 'color:#f59e0b; font-size:18px; font-weight:bold')
+            }, 1600)
+        }
+
+        // Start everything
+        function startWebsite() {
+            resizeCanvas()
+            createStars()
+            initRocket()
+            animate()
+            
+            // Keyboard shortcut (press B to skip to book)
+            document.addEventListener('keydown', e => {
+                if (e.key.toLowerCase() === 'b') {
+                    if (switchTimeout) clearTimeout(switchTimeout)
+                    launchBookTransition()
+                }
+            })
+            
+            // Responsive support
+            window.addEventListener('resize', handleResize)
+            
+            console.log('%c🚀 रकेट र फटाका तयार छन्! मेरी प्रियको लागि २०८३ को सबैभन्दा सुन्दर वेबसाइट 💞', 'color:#ec4899; font-size:15px')
+        }
+
+        window.onload = startWebsite
+    </script>
+</body>
+</html>
